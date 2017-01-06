@@ -7,25 +7,24 @@ describe DockingStation do
   end
 
   it "checks if bike exists and is working" do
-    expect(subject.release_bike).to be_working
+    station = DockingStation.new
+    station.dock
+    expect(station.release_bike).to be_working
   end
 
   it "docks a bike at station" do
     bike = Bike.new
-    station = subject
-    station.release_bike
-    expect(station.dock).to eq(nil)
+    expect(subject.dock[0].class).to eq(bike.class)
   end
 
   it "station full" do
-    bike = Bike.new
-    expect { subject.dock }.to raise_error("Station is full")
+    station = DockingStation.new
+    20.times {station.dock}
+    expect { station.dock }.to raise_error("Station is full")
   end
 
   it "no more bikes available" do
-    station = DockingStation.new
-    station.release_bike
-    expect{ station.release_bike }.to raise_error("No more bikes available")
+    expect{ subject.release_bike }.to raise_error("No more bikes available")
   end
 
 end
