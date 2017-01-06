@@ -1,33 +1,31 @@
-require "docking_station"
-require "bike"
+require 'docking_station'
+require 'bike'
 
 describe DockingStation do
-
-  bike = Bike.new
-  station = DockingStation.new(bike)
-
-  it 'check' do
-    expect(station).to respond_to(:release_bike)
+  it "releases a bike" do
+    expect(subject).to respond_to(:release_bike)
   end
 
-  it 'releases a bike' do
-    expect(station.release_bike).to eq bike
+  it "checks if bike exists and is working" do
+    expect(subject.release_bike).to be_working
   end
 
-  it 'docks a bike' do
-    new_bike = nil
-    new_station = DockingStation.new(new_bike)
-    expect(new_station.dock_bike).to eq nil
+  it "docks a bike at station" do
+    bike = Bike.new
+    station = subject
+    station.release_bike
+    expect(station.dock).to eq(nil)
   end
 
-  it 'raises an error when no bikes' do
-    new_bike = nil
-    new_station = DockingStation.new(new_bike)
-    expect{ new_station.release_bike }.to raise_error("no bikes available")
+  it "station full" do
+    bike = Bike.new
+    expect { subject.dock }.to raise_error("Station is full")
   end
 
-  it 'raises an error when dock is full' do
-    expect { station.dock_bike}.to raise_error("station full")
+  it "no more bikes available" do
+    station = DockingStation.new
+    station.release_bike
+    expect{ station.release_bike }.to raise_error("No more bikes available")
   end
 
 end
